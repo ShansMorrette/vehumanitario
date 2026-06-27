@@ -3,9 +3,12 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { personasLocalizadas } from "./schema";
 
 async function seed() {
-  const pool = new Pool({
-    connectionString: "postgresql://postgres:postgres@127.0.0.1:5432/app_db",
-  });
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    console.error("❌ DATABASE_URL no está definida");
+    process.exit(1);
+  }
+  const pool = new Pool({ connectionString: databaseUrl });
   const db = drizzle(pool);
 
   const registros = [
